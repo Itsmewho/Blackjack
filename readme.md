@@ -123,3 +123,4 @@ Use Mongo for long term
 - Start looking into machine / deep learning.
   - Algorithmic trading.
   - Load balancers (If needed)
+    .
