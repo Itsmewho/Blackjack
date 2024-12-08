@@ -65,20 +65,6 @@ Add on has more features are done.
 
 #
 
-- Use different DB for ADMIN
-
-  - Use bycript / uuid / secrets
-
-- Use different DB for Admin Login Combinations.
-
-  - Use bycript / uuid / secrets
-
-- Use different DB for User Login combinations.
-
-  - Use bycript / uuid / secrets
-
-- Use different DB for BlackJack
-
 - Main game:
   - Blackjack.
   - View top-3 highscore.
@@ -96,7 +82,6 @@ LEARNING POITNS :
 - Refine boiler plate
 - CRUD-operations.
 - Auth
-- DB's
 
 #
 
