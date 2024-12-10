@@ -84,7 +84,7 @@ if __name__ == "__main__":
             create_admin()
 
             print(blue + "Gathering and encrypting system information..." + reset)
-            system_info = get_system_info()  # Call your previously defined function
+            system_info = get_system_info()
 
             log_file_path = Path("./data/admin_log.json")
             store_admin_log(system_info, log_file_path)
