@@ -1,3 +1,5 @@
 .env
 *.pyc
 __pycache__/
+./data/admin_log.json
+./data/admin.json
