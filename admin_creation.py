@@ -5,7 +5,6 @@ from utils.auth import (
     sha256_encrypt,
     bcrypt_hash,
     get_system_info,
-    encrypt_data,
     store_admin_log,
 )
 from utils.helpers import green, red, blue, reset, typing_effect, input_quit_handle
