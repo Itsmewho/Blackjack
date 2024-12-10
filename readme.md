@@ -51,7 +51,7 @@ Add on has more features are done.
       - Lock location (yes/no)
 - Check login credentials and MAC-addres. If no match: send accept message to,.
 
-  - Check for harddrive, motherboard serial combination
+  - Check for harddrive(s), motherboard serial, MAC-addres(s) combination (done)
   - If already used combination: Skip.
 
 - Lock out Admin account if wrong input or MAC-addres or serial combination(send email/sms to,.)
