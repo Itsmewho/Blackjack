@@ -3,3 +3,4 @@
 __pycache__/
 admin_log.json
 admin.json
+user_log.json
