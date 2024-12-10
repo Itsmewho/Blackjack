@@ -72,7 +72,7 @@ def get_system_info():
         mac_addresses = []
         try:
             if platform.system() == "Windows":
-                # Use PowerShell to get MAC addresses from Get-NetAdapter
+                # Use PowerShell to get MAC addresses
                 command = (
                     'powershell -Command "Get-NetAdapter | '
                     'Select-Object -ExpandProperty MacAddress"'
@@ -84,7 +84,7 @@ def get_system_info():
                     mac.replace("-", ":").strip() for mac in mac_addresses if mac
                 ]
             else:
-                # Linux/Mac logic remains the same
+                # Linux/Mac logic
                 output = subprocess.check_output("ip link", shell=True).decode()
                 mac_matches = re.findall(
                     r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
