@@ -41,13 +41,13 @@ def get_collection(collection_key: str):
         logger.error(red + f"Collection key '{collection_key}' not found." + reset)
         return None
 
-    if db is None:  # Ensure db is valid
+    if db is None:
         logger.error(red + "Database connection is not established." + reset)
         return None
 
-    collection = db[collection_name]  # Corrected way to access collections
+    collection = db[collection_name]
 
-    if collection is None:  # Check if collection is None
+    if collection is None:
         logger.error(
             red + f"Collection '{collection_name}' not found in database." + reset
         )
