@@ -87,7 +87,7 @@ if __name__ == "__main__":
             system_info = get_system_info()
 
             log_file_path = Path("./data/admin_log.json")
-            store_admin_log(system_info, log_file_path)
+            # store_admin_log(system_info, log_file_path)
 
             print(
                 green

@@ -17,7 +17,7 @@ MONGO_COLLECTIONS = {
     "users": os.getenv("MONGO_USERS", "users"),
     "admin_log": os.getenv("MONGO_ADLOG", "admin_log"),
     "user_log": os.getenv("MONGO_USLOG", "user_log"),
-    "highscores": os.getenv("MONGO_HIGHSCORES", "highscores"),
+    "highscore": os.getenv("MONGO_HIGHSCORES", "highscore"),
 }
 
 # Setup logger
@@ -36,9 +36,21 @@ except Exception as e:
 
 
 def get_collection(collection_key: str):
-    collection_name = MONGO_COLLECTIONS(collection_key)
+    collection_name = MONGO_COLLECTIONS.get(collection_key)
     if not collection_name:
-        logger.info(red + f"Collection key '{collection_key}' not found. {reset}")
+        logger.error(red + f"Collection key '{collection_key}' not found." + reset)
         return None
 
-    return db[collection_name] if db else None
+    if db is None:  # Ensure db is valid
+        logger.error(red + "Database connection is not established." + reset)
+        return None
+
+    collection = db[collection_name]  # Corrected way to access collections
+
+    if collection is None:  # Check if collection is None
+        logger.error(
+            red + f"Collection '{collection_name}' not found in database." + reset
+        )
+        return None
+
+    return collection
