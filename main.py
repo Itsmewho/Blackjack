@@ -8,6 +8,7 @@ from utils.helpers import (
     input_quit_handle,
     clear,
     handle_quit,
+    sleep,
 )
 
 
@@ -15,6 +16,7 @@ def main():
 
     typing_effect(blue + "Welcome to Blackjack!" + reset)
     typing_effect("type: 'q' or 'quit' to quit at any time!")
+    sleep()
 
     while True:
         clear()

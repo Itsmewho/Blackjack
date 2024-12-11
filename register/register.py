@@ -1,5 +1,9 @@
 # Main register
 from db.db_operations import insert_document, find_documents
+from register.email_confirmation import (
+    generate_confirmation_token,
+    send_confirmation_mail,
+)
 from utils.helpers import (
     green,
     red,
@@ -8,6 +12,7 @@ from utils.helpers import (
     typing_effect,
     input_quit_handle,
     clear,
+    sleep,
 )
 from utils.auth import (
     bcrypt_hash,
@@ -25,6 +30,7 @@ def check_user_exists(email):
 
 
 def main_register():
+
     while True:
         clear()
         typing_effect(blue + "Welcome to the User Registration! 🚀 " + reset)
@@ -53,8 +59,8 @@ def main_register():
                 return
         break
 
+    # Primary password handling
     while True:
-        # Primary password handling
         clear()
         while True:
             password = input_masking(green + "Enter a password (min length is 4): ")
@@ -107,6 +113,9 @@ def main_register():
     hashed_password = bcrypt_hash(password)
     hashed_sec_password = bcrypt_hash(sec_password)
 
+    token = generate_confirmation_token(email)
+    send_confirmation_mail(email, token)
+
     system_info = get_system_info()
     mac_addresses = system_info.get("mac_addresses", [])
     latitude = system_info.get("latitude", "Unknown")
@@ -126,6 +135,7 @@ def main_register():
         "password": hashed_password,
         "sec_password": hashed_sec_password,
         "role": "user",
+        "token": token,
     }
 
     log_data = {
@@ -135,10 +145,13 @@ def main_register():
     }
 
     try:
-        insert_document("users", user_data)
-        insert_document("user_log", log_data)
+        insert_document("pending_users", user_data)
+        insert_document("pending_log", log_data)
         typing_effect(
-            green + "Registration successful! Your account has been created." + reset
+            green
+            + "Registration almost done! Please check your email to confirm."
+            + reset
         )
+        sleep()
     except Exception as e:
-        print(red + f"An error occurred during registration: {e}" + reset)
+        typing_effect(red + f"An error occurred during registration: {e}" + reset)

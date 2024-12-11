@@ -18,6 +18,8 @@ MONGO_COLLECTIONS = {
     "admin_log": os.getenv("MONGO_ADLOG", "admin_log"),
     "user_log": os.getenv("MONGO_USLOG", "user_log"),
     "highscore": os.getenv("MONGO_HIGHSCORES", "highscore"),
+    "pending_users": os.getenv("PENDING_USERS", "pending_users"),
+    "pending_log": os.getenv("PENDING_LOG", "pending_log"),
 }
 
 # Setup logger
