@@ -4,8 +4,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from itsdangerous import URLSafeTimedSerializer
 from utils.helpers import red, green, reset
-from db.db_operations import insert_document, delete_documents, find_documents
-
 
 serializer = URLSafeTimedSerializer(os.getenv("SECRET_KEY"))
 

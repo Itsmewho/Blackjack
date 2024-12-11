@@ -1,5 +1,5 @@
 # Main register
-from db.db_operations import insert_document, find_documents
+from db.db_operations import insert_document
 from register.email_confirm import (
     generate_confirmation_token,
     send_confirmation_mail,
@@ -19,14 +19,8 @@ from utils.auth import (
     get_system_info,
     input_masking,
     validation_input,
+    check_user_exists,
 )
-
-
-def check_user_exists(email):
-
-    email = email.strip()
-    existing_user = find_documents("users", {"email": email})
-    return len(existing_user) > 0
 
 
 def main_register():

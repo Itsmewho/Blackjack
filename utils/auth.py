@@ -8,6 +8,7 @@ from pathlib import Path
 from colorama import Style
 import os, re, time, getpass, msvcrt
 from models.all_models import RegisterModel
+from db.db_operations import find_documents
 from pydantic import ValidationError, BaseModel
 from utils.helpers import red, blue, reset, input_quit_handle
 
@@ -241,3 +242,10 @@ def validation_input(prompt, field_name, min_length=None, model=RegisterModel):
             return user_input
         else:
             input_quit_handle(red + f"Invalid: {field_name} : {validation}{reset}")
+
+
+def check_user_exists(email):
+
+    email = email.strip()
+    existing_user = find_documents("users", {"email": email})
+    return len(existing_user) > 0
