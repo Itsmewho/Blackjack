@@ -1,5 +1,5 @@
 # Helper functions (frequent use)
-import os, time, getpass, msvcrt
+import os, time
 from colorama import Fore, Style
 
 reset = Style.RESET_ALL

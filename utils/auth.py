@@ -9,7 +9,7 @@ from colorama import Style
 import os, re, time, getpass, msvcrt
 from models.all_models import RegisterModel
 from pydantic import ValidationError, BaseModel
-from utils.helpers import green, red, blue, reset, input_quit_handle
+from utils.helpers import red, blue, reset, input_quit_handle
 
 
 def input_masking(prompt, delay=0.02, typing_effect=False, color=None):
@@ -82,7 +82,6 @@ def get_system_info():
                 )
                 output = subprocess.check_output(command, shell=True).decode().strip()
                 mac_addresses = output.splitlines()
-                # Clean up MAC addresses (standardize format if needed)
                 mac_addresses = [
                     mac.replace("-", ":").strip() for mac in mac_addresses if mac
                 ]
@@ -92,55 +91,78 @@ def get_system_info():
                 mac_matches = re.findall(
                     r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
                 )
-                mac_addresses = list(set(mac_matches))  # Remove duplicates
+                mac_addresses = list(set(mac_matches))
 
-            # Ensure uniqueness and valid formatting
-            mac_addresses = list(filter(None, mac_addresses))
+                # Fallback to ifconfig if ip link fails
+                if not mac_addresses:
+                    output = subprocess.check_output("ifconfig", shell=True).decode()
+                    mac_matches = re.findall(
+                        r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
+                    )
+                    mac_addresses = list(set(mac_matches))
+            mac_addresses = list(filter(None, mac_addresses))  # Remove empty entries
         except Exception as e:
-            print(f"Error fetching MAC addresses: {e}")
+            print(red + f"Error fetching MAC addresses: {e}" + reset)
 
         # HDD/SSD Serial Numbers
         drives = []
-        if platform.system() == "Windows":
-            output = subprocess.check_output(
-                "wmic diskdrive get SerialNumber,Model", shell=True
-            ).decode()
-            for line in output.splitlines()[1:]:
-                if line.strip():
-                    model, serial = line.strip().rsplit(None, 1)
-                    drives.append({"model": model, "serial": serial})
-        else:
-            output = subprocess.check_output(
-                "lsblk -o NAME,SERIAL", shell=True
-            ).decode()
-            for line in output.splitlines()[1:]:
-                if line.strip():
-                    parts = line.split()
-                    if len(parts) == 2:
-                        drives.append({"model": parts[0], "serial": parts[1]})
+        try:
+            if platform.system() == "Windows":
+                output = subprocess.check_output(
+                    "wmic diskdrive get SerialNumber,Model", shell=True
+                ).decode()
+                for line in output.splitlines()[1:]:
+                    if line.strip():
+                        model, serial = line.strip().rsplit(None, 1)
+                        drives.append({"model": model, "serial": serial})
+            else:
+                output = subprocess.check_output(
+                    "lsblk -o NAME,SERIAL", shell=True
+                ).decode()
+                for line in output.splitlines()[1:]:
+                    if line.strip():
+                        parts = line.split()
+                        if len(parts) == 2:
+                            drives.append({"model": parts[0], "serial": parts[1]})
+        except Exception as e:
+            print(red + f"Error fetching HDD/SSD serial numbers: {e}" + reset)
 
         # Motherboard Serial Number
-        if platform.system() == "Windows":
-            motherboard_serial = (
-                subprocess.check_output("wmic baseboard get serialnumber", shell=True)
-                .decode()
-                .split("\n")[1]
-                .strip()
-            )
-        else:
-            motherboard_serial = (
-                subprocess.check_output(
-                    "cat /sys/class/dmi/id/board_serial", shell=True
+        try:
+            if platform.system() == "Windows":
+                motherboard_serial = (
+                    subprocess.check_output(
+                        "wmic baseboard get serialnumber", shell=True
+                    )
+                    .decode()
+                    .split("\n")[1]
+                    .strip()
                 )
-                .decode()
-                .strip()
-            )
+            else:
+                motherboard_serial = (
+                    subprocess.check_output(
+                        "cat /sys/class/dmi/id/board_serial", shell=True
+                    )
+                    .decode()
+                    .strip()
+                )
+        except Exception as e:
+            motherboard_serial = "Unknown"
+            print(red + f"Error fetching motherboard serial: {e}" + reset)
 
         # Location
-        location = requests.get("https://ipinfo.io/json").json().get("loc", "Unknown")
-        if location != "Unknown":
-            latitude, longitude = location.split(",")
-        else:
+        try:
+            response = requests.get("https://ipinfo.io/json", timeout=5)
+            if response.status_code == 200:
+                location = response.json().get("loc", "Unknown")
+                if location != "Unknown":
+                    latitude, longitude = location.split(",")
+                else:
+                    latitude = longitude = "Unknown"
+            else:
+                latitude = longitude = "Unknown"
+        except Exception as e:
+            print(red + f"Error fetching location: {e}" + reset)
             latitude = longitude = "Unknown"
 
         return {
@@ -152,7 +174,13 @@ def get_system_info():
         }
     except Exception as e:
         print(f"Error fetching system info: {e}")
-        return {}
+        return {
+            "mac_addresses": [],
+            "drives": [],
+            "motherboard_serial": "Unknown",
+            "latitude": "Unknown",
+            "longitude": "Unknown",
+        }
 
 
 def encrypt_data(data: dict) -> dict:
