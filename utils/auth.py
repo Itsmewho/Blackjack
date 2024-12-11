@@ -71,6 +71,22 @@ def bcrypt_hash(password: str) -> str:
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
+def verify_password(user_email, password):
+    user = find_documents("users", {"email": user_email})
+
+    if user:
+        user = user[0]
+        hashed_password = user["password"]
+
+        if bcrypt.checkpw(password.encode(), hashed_password.encode()):
+            return True
+        else:
+            return False
+    else:
+        print(red + "User not found." + reset)
+        return False
+
+
 def get_system_info():
     try:
         mac_addresses = []
