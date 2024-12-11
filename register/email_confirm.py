@@ -23,8 +23,8 @@ def confirm_token(token, expiration=600):
 
 
 def send_confirmation_mail(to_email, token):
-    smtp_host = os.getenv("SMTP_HOST", "mail.jordytromp.com")
-    smtp_port = os.getenv("SMTP_PORT", 465)
+    smtp_host = os.getenv("SMTP_HOST")
+    smtp_port = os.getenv("SMTP_PORT")
     smtp_user = os.getenv("SMTP_USER")
     smtp_pass = os.getenv("SMTP_PASS")
 
@@ -54,41 +54,3 @@ def send_confirmation_mail(to_email, token):
             print(green + "Confirmation email sent successfully!" + reset)
     except Exception as e:
         print(red + f"Error sending email: {e}" + reset)
-
-
-# def confirm_registration(token):
-#     email = confirm_token(token)
-#     if not email:
-#         print(red + "Invalid or expired token!" + reset)
-#         return False
-
-#     user_data = find_documents("pending_users", {"email": email})
-#     if not user_data:
-#         print(red + "No pending registration found for this email!" + reset)
-#         return False
-
-#     user_data = user_data[0]
-#     del user_data["_id"]
-
-#     log_user = find_documents("pending_log", {"email": email})
-#     if log_user:
-#         log_user = log_user[0]
-#         del log_user["_id"]
-#     else:
-#         print(red + "No log data found for this email!" + reset)
-#         return False
-
-#     # Move user data to "users" collection
-#     try:
-#         insert_document("users", user_data)
-#         insert_document("user_log", log_user)
-#         delete_documents(
-#             "pending_users", {"email": email}
-#         )  # Clean up pending registration
-#         delete_documents("pending_user_logs", {"email": email})  # Clean up pending log
-
-#         print(green + "Email confirmed! Registration complete." + reset)
-#         return True
-#     except Exception as e:
-#         print(red + f"An error occurred during confirmation: {e}" + reset)
-#         return False

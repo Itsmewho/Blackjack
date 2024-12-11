@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from db.db_operations import find_documents, insert_document, delete_documents
-from register.email_confirmation import confirm_token
+from register.email_confirm import confirm_token
 
 app = Flask(__name__)
 

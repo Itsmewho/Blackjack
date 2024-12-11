@@ -1,6 +1,6 @@
 # Main register
 from db.db_operations import insert_document, find_documents
-from register.email_confirmation import (
+from register.email_confirm import (
     generate_confirmation_token,
     send_confirmation_mail,
 )

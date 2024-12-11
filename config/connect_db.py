@@ -11,15 +11,14 @@ MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DBNAME = os.getenv("MONGO_DBNAME")
 
 
-# Default collection names (fallback to these if not set in the .env file)
 MONGO_COLLECTIONS = {
-    "admin": os.getenv("MONGO_ADMIN", "admin"),
-    "users": os.getenv("MONGO_USERS", "users"),
-    "admin_log": os.getenv("MONGO_ADLOG", "admin_log"),
-    "user_log": os.getenv("MONGO_USLOG", "user_log"),
-    "highscore": os.getenv("MONGO_HIGHSCORES", "highscore"),
-    "pending_users": os.getenv("PENDING_USERS", "pending_users"),
-    "pending_log": os.getenv("PENDING_LOG", "pending_log"),
+    "admin": os.getenv("MONGO_ADMIN"),
+    "users": os.getenv("MONGO_USERS"),
+    "admin_log": os.getenv("MONGO_ADLOG"),
+    "user_log": os.getenv("MONGO_USLOG"),
+    "highscore": os.getenv("MONGO_HIGHSCORES"),
+    "pending_users": os.getenv("MONGO_PENDING_USERS"),
+    "pending_log": os.getenv("MONGO_PENDING_LOG"),
 }
 
 # Setup logger

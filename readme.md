@@ -20,8 +20,8 @@ Add on has more features are done.
     - Change 2FA.
   - View login locations.
     - Lock locations.
-  - Logout.
-  - Exit.
+  - Logout. (done)
+  - Exit. (done)
   - Delete account.
 
 - Admin:
@@ -41,7 +41,7 @@ Add on has more features are done.
 
 #
 
-- Register confirmation (10min window)
+- Register email confirmation (done)
 - Add data change for user account[role=user]
 - Add reset password via mail/phone?
 - 2FA. (choice = phone/email)
@@ -91,7 +91,7 @@ Next projects:
 
 - Add on if found something nice.
 
-- Collect 13F's data.
+- Collect 13F's and corresponding Balance sheet data.
 
   - Sort on Peter Lynch system.
   - Joal greenbalt system.
