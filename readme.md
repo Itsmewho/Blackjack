@@ -6,7 +6,7 @@ Add on has more features are done.
 
 #
 
-- Make a user register.
+- Make a user register. (done)
 - Login for registerd users.
 - Login menu:
 
