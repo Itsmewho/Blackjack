@@ -1,16 +1,20 @@
 import hashlib
 import bcrypt
 import json
+import smtplib
+import requests
 import platform
 import subprocess
-import requests
 from pathlib import Path
 from colorama import Style
+from email.mime.text import MIMEText
 import os, re, time, getpass, msvcrt
 from models.all_models import RegisterModel
 from db.db_operations import find_documents
+from email.mime.multipart import MIMEMultipart
 from pydantic import ValidationError, BaseModel
-from utils.helpers import red, blue, reset, input_quit_handle
+from register.email_confirm import generate_confirmation_token, confirm_token
+from utils.helpers import green, red, blue, reset, input_quit_handle
 
 
 def input_masking(prompt, delay=0.02, typing_effect=False, color=None):
@@ -265,3 +269,47 @@ def check_user_exists(email):
     email = email.strip()
     existing_user = find_documents("users", {"email": email})
     return len(existing_user) > 0
+
+
+def send_email(to_email, subject, body):
+    try:
+        smtp_host = os.getenv("SMTP_HOST")
+        smtp_port = os.getenv("SMTP_PORT")
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_pass = os.getenv("SMTP_PASS")
+
+        message = MIMEMultipart()
+        message["From"] = smtp_user
+        message["To"] = to_email
+        message["Subject"] = subject
+        message.attach(MIMEText(body, "html"))
+
+        with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, to_email, message.as_string())
+            print(green + "Confirmation email sent successfully!" + reset)
+    except Exception as e:
+        print(red + f"Error sending email: {e}" + reset)
+
+
+def email_confirmation(email):
+    token = generate_confirmation_token(email)
+    confirmation_link = f"http://127.0.0.1:5000/confirm/2fa/{token}"
+    send_email(
+        to_email=email,
+        subject="Confirm Your 2FA",
+        body=f"""
+    <html>
+        <body>
+            <p>Hello,</p>
+            <p>Please confirm login by clicking the link below:</p>
+            <a href="{confirmation_link}">Confirm Your Email</a>
+            <p>This link will expire in 10 minutes.</p>
+        </body>
+    </html>
+    """,
+    )
+
+
+def verify_login(name, password):
+    admin = find_documents("admin", {"name": name})

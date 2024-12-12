@@ -1,5 +1,6 @@
 # Helper functions (frequent use)
 import os, time
+from datetime import datetime
 from colorama import Fore, Style
 
 reset = Style.RESET_ALL
@@ -42,3 +43,7 @@ def input_quit_handle(prompt, reset=Style.RESET_ALL):
     if user_input in {"q", "quit"}:
         handle_quit()
     return user_input
+
+
+def current_time():
+    return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")

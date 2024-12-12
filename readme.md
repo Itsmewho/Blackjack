@@ -7,22 +7,22 @@ Add on has more features are done.
 #
 
 - Make a user register. (done)
-- Login for registerd users.
-- Login menu:
+- Login for registerd users. (done)
+- Login menu: (done)
 
-  print(f"welcome back {user}")
-  print("last login from,.......")
+  print(f"welcome back {user}") (done)
+  print("last login from,.......") (done)
 
   - Go to Blackjack.
-  - Account details.
-    - Change details [role=user]
-    - Change password.
-    - Change 2FA.
-  - View login locations.
+  - Account details. (done)
+    - Change details (done)
+    - Change password. (done)
+    - Change 2FA. (done)
+  - View login locations. (done)
     - Lock locations.
   - Logout. (done)
   - Exit. (done)
-  - Delete account.
+  - Delete account. (done)
 
 - Admin:
 
@@ -42,26 +42,21 @@ Add on has more features are done.
 #
 
 - Register email confirmation (done)
-- Add data change for user account[role=user]
-- Add reset password via mail/phone?
-- 2FA. (choice = phone/email)
-- Last login from {"date": "UTC", "location": location, "earth":{"long":"longditude, "lat":latitude"}}
+- Add data change for user account[role=user] (done)
+- Add reset password (done)
+- 2FA. (done -> not working with the login yet)
+- Add unlock account function (flask e-mail)
+- Last login from {"date": "UTC", "location": location, "earth":{"long":"longditude, "lat":latitude"}} ( done )
   - If not recognized.
-    - Give secoundairy password and email/sms confimation.
+    - Give secoundairy password and email confimation.
       - Lock location (yes/no)
 - Check login credentials and MAC-addres. If no match: send accept message to,.
 
   - Check for harddrive(s), motherboard serial, MAC-addres(s) combination (done)
-  - If already used combination: Skip.
 
-- Lock out Admin account if wrong input or MAC-addres or serial combination(send email/sms to,.)
+- Lock out Admin account if wrong input or MAC-addres or serial combination(send email to,.)
 
-- Lock out User account if wrong input \*3 (send email/sms)
-
-  - If user credentials and MAC-address do not match:
-    - Proseed login but show (\*) for every usefull data.
-    - Remove reset password.
-    - Remove email / phone data.
+- Lock out User account if wrong input \*3 (send email)
 
 #
 
@@ -77,11 +72,13 @@ LEARNING POITNS :
 
 - Get better at coding.
 - Work on functions.
-- Use of folder system
+- Work with (heavy) nested dicts.
+- Sending emails (flask)
+- Use of folder system.
 - Refine coding style,. . . .... . . .. . . . .......
-- Refine boiler plate
+- Refine boiler plate.
 - CRUD-operations.
-- Auth
+- Auth.
 
 #
 

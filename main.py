@@ -1,4 +1,5 @@
 from register.register import main_register
+from user_login.login import login
 from utils.helpers import (
     green,
     red,
@@ -32,8 +33,9 @@ def main():
             continue
 
         elif action in ["login", "log", "l"]:
-            typing_effect(red + "In construction!" + reset)
-            handle_quit()
+            clear()
+            login()
+            continue
 
         else:
             print(red + "Invalid input. Please enter 'login' or 'register'." + reset)
