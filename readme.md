@@ -113,7 +113,7 @@ Next BIG-project:
 - Display all major futures?
 - Display all major FOREX-pairs
 - Display VIX vs Bonds.
-- Display Materials goods
+- Display commodities.
 
   - Show notification if intrest is found with PDF-summary. (open / ignore)
 
