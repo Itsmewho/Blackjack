@@ -26,18 +26,16 @@ Add on has more features are done.
 
 - Admin:
 
-  - Only needs to input name for login. (Im lazy)
-
-    - Admin menu:
-      - See users.
-        - Get user details.
-        - Change user data[role=admin].
-        - Delete user.
-    - Reset password.
-    - View login locations
-      - Lock locations
-    - Logout. (done)
-    - Exit. (done)
+  - Admin menu:
+    - See users.
+      - Get user details.
+      - Change user data[role=admin].
+      - Delete user.
+  - Reset password.
+  - View login locations
+    - Lock locations
+  - Logout. (done)
+  - Exit. (done)
 
 #
 
