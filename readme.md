@@ -82,7 +82,9 @@ LEARNING POITNS :
 
 Next BIG-project:
 
-- Use reg/log system.
+#
+
+- Use log system.
 
 - Add on if found something nice ;-D
 
