@@ -40,21 +40,21 @@ Add on has more features are done.
 #
 
 - Register email confirmation (done)
-- Add data change for user account[role=user] (done)
+- Add data change for user account (done)
 - Add reset password (done)
-- 2FA. (done -> not working with the login yet)
+- 2FA. (done)
 - Add unlock account function (flask e-mail)
 - Last login from {"date": "UTC", "location": location, "earth":{"long":"longditude, "lat":latitude"}} ( done )
   - If not recognized.
     - Give secoundairy password and email confimation.
       - Lock location (yes/no)
-- Check login credentials and MAC-addres. If no match: send accept message to,.
+- Check login credentials and MAC-addres. If no match: send message to,.( done )
 
   - Check for harddrive(s), motherboard serial, MAC-addres(s) combination (done)
 
-- Lock out Admin account if wrong input or MAC-addres or serial combination(send email to,.)
+- Lock out Admin account if wrong input or MAC-addres or serial combination(send email to,. (done ))
 
-- Lock out User account if wrong input \*3 (send email)
+- Lock out User account if wrong input \*3 (send email) ( done )
 
 #
 

@@ -126,18 +126,24 @@ def change_two_fa(user_email):
     choice = input_quit_handle(
         green + "Choose 2FA method:\n"
         "(1) Email\n"
-        "(2) Return to menu\n"
+        "(2) Disable 2FA\n"
+        "(3) Return to menu\n"
         "Enter your choice: "
     )
     if choice == "1":
         update_documents(
             "users", {"email": user_email}, {"$set": {"2fa_method": "email"}}
         )
-        typing_effect("2FA method set to email.")
+        typing_effect(green + "2FA method set to email." + reset)
     elif choice == "2":
+        update_documents(
+            "users", {"email": user_email}, {"$set": {"2fa_method": "none"}}
+        )
+        typing_effect(red + "2FA method disabled." + reset)
+    elif choice == "3":
         return
     else:
-        print("Invalid choice.")
+        print(red + "Invalid choice. Please try again." + reset)
 
 
 def change_password(user_email):

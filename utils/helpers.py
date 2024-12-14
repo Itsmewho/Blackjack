@@ -5,6 +5,7 @@ from colorama import Fore, Style
 
 reset = Style.RESET_ALL
 blue = Fore.BLUE
+yellow = Fore.YELLOW
 red = Fore.RED
 green = Fore.GREEN
 

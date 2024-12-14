@@ -93,29 +93,28 @@ def verify_password(user_email, password):
 
 def get_system_info():
     try:
+        # MAC Addresses
         mac_addresses = []
         try:
             if platform.system() == "Windows":
-                # Use PowerShell to get MAC addresses
+                # Windows: Get MAC addresses using PowerShell
                 command = (
                     'powershell -Command "Get-NetAdapter | '
                     'Select-Object -ExpandProperty MacAddress"'
                 )
                 output = subprocess.check_output(command, shell=True).decode().strip()
-                mac_addresses = output.splitlines()
                 mac_addresses = [
-                    mac.replace("-", ":").strip() for mac in mac_addresses if mac
+                    mac.replace("-", ":").strip() for mac in output.splitlines() if mac
                 ]
             else:
-                # Linux/Mac logic
-                output = subprocess.check_output("ip link", shell=True).decode()
-                mac_matches = re.findall(
-                    r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
-                )
-                mac_addresses = list(set(mac_matches))
-
-                # Fallback to ifconfig if ip link fails
-                if not mac_addresses:
+                # Linux/Mac: Get MAC addresses using ip link or ifconfig
+                try:
+                    output = subprocess.check_output("ip link", shell=True).decode()
+                    mac_matches = re.findall(
+                        r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
+                    )
+                    mac_addresses = list(set(mac_matches))
+                except Exception:
                     output = subprocess.check_output("ifconfig", shell=True).decode()
                     mac_matches = re.findall(
                         r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}", output
@@ -125,10 +124,11 @@ def get_system_info():
         except Exception as e:
             print(red + f"Error fetching MAC addresses: {e}" + reset)
 
-        # HDD/SSD Serial Numbers
+        # Drives (HDD/SSD Serial Numbers)
         drives = []
         try:
             if platform.system() == "Windows":
+                # Windows: Get drives using WMIC
                 output = subprocess.check_output(
                     "wmic diskdrive get SerialNumber,Model", shell=True
                 ).decode()
@@ -137,6 +137,7 @@ def get_system_info():
                         model, serial = line.strip().rsplit(None, 1)
                         drives.append({"model": model, "serial": serial})
             else:
+                # Linux: Get drives using lsblk
                 output = subprocess.check_output(
                     "lsblk -o NAME,SERIAL", shell=True
                 ).decode()
@@ -149,8 +150,10 @@ def get_system_info():
             print(red + f"Error fetching HDD/SSD serial numbers: {e}" + reset)
 
         # Motherboard Serial Number
+        motherboard_serial = "Unknown"
         try:
             if platform.system() == "Windows":
+                # Windows: Get motherboard serial using WMIC
                 motherboard_serial = (
                     subprocess.check_output(
                         "wmic baseboard get serialnumber", shell=True
@@ -160,6 +163,7 @@ def get_system_info():
                     .strip()
                 )
             else:
+                # Linux: Read from system files
                 motherboard_serial = (
                     subprocess.check_output(
                         "cat /sys/class/dmi/id/board_serial", shell=True
@@ -168,24 +172,20 @@ def get_system_info():
                     .strip()
                 )
         except Exception as e:
-            motherboard_serial = "Unknown"
             print(red + f"Error fetching motherboard serial: {e}" + reset)
 
-        # Location
+        # Location (Latitude and Longitude)
+        latitude, longitude = "Unknown", "Unknown"
         try:
             response = requests.get("https://ipinfo.io/json", timeout=5)
             if response.status_code == 200:
                 location = response.json().get("loc", "Unknown")
                 if location != "Unknown":
                     latitude, longitude = location.split(",")
-                else:
-                    latitude = longitude = "Unknown"
-            else:
-                latitude = longitude = "Unknown"
         except Exception as e:
             print(red + f"Error fetching location: {e}" + reset)
-            latitude = longitude = "Unknown"
 
+        # Return System Info
         return {
             "mac_addresses": mac_addresses,
             "drives": drives,

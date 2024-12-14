@@ -51,7 +51,9 @@ def create_admin():
         return
 
     encrypted_admin_data = {
-        "name": name,  # if everything works at this to all sha256_encrypt(name)
+        "name": sha256_encrypt(
+            name
+        ),  # if everything works at this to all sha256_encrypt(name)
         "surname": surname,
         "email": email,
         "phone": phone,
