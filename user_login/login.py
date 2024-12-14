@@ -93,25 +93,11 @@ def admin_login_flow(admin, password):
     if normalized_system_info != normalized_last_log:
         print(red + "System info mismatch! Your account is locked." + reset)
 
-        # Debug: Log mismatched details
-        print(yellow + "Expected System Info: " + reset, normalized_last_log)
-        print(yellow + "Provided System Info: " + reset, normalized_system_info)
-
         send_email(
             admin["email"],
             "Admin Account Locked",
             "Your admin account has been locked due to suspicious login attempts.",
         )
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
-        sleep()
         return
 
     # Log successful login
@@ -214,7 +200,7 @@ def log_login_time(log_collection, identifier, system_info):
     login_times = (
         log.get("login_times", [])[-4:] if log else []
     )  # Default to empty list if no log
-    login_times.append({"time": current_time(), "system_info": system_info})
+    login_times.append({"time": current_time()})
 
     if log:
         update_documents(
@@ -227,14 +213,6 @@ def log_login_time(log_collection, identifier, system_info):
             {"$set": {"login_times": login_times}},
         )
     else:
-        insert_document(
-            log_collection,
-            {
-                "email": identifier if log_collection == "user_log" else None,
-                "name": identifier if log_collection == "admin_log" else None,
-                "login_times": login_times,
-                "system_info": system_info,
-            },
-        )
+        return
 
-    print(green + "Login time and system info logged successfully." + reset)
+    print(green + "Login time logged successfully." + reset)
