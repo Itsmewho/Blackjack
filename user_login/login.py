@@ -54,18 +54,56 @@ def admin_login_flow(admin, password):
         )
         return
 
+    if admin.get("2fa_method") == "email":
+        print(blue + "Sending 2FA code to your email..." + reset)
+        try:
+            # Initiate 2FA flow using Flask backend
+            response = requests.post(
+                "http://127.0.0.1:5000/send-2fa", json={"email": admin["email"]}
+            )
+            response.raise_for_status()
+        except requests.RequestException as e:
+            typing_effect(
+                red
+                + f"Error sending 2FA code: {str(e)}. Login denied. flask offline"
+                + reset
+            )
+            return
+
+        # Retrieve the expected 2FA code
+        expected_code = response.json().get("code")
+        if not expected_code:
+            print(red + "Failed to retrieve 2FA code from server." + reset)
+            return
+
+        # Prompt admin to enter the code
+        code = input("Enter the 2FA code sent to your email: ").strip()
+
+        # Verify the 2FA code
+        try:
+            verification_response = requests.post(
+                "http://127.0.0.1:5000/verify-2fa",
+                json={"code": code, "expected_code": expected_code},
+            )
+            verification_response.raise_for_status()
+        except requests.RequestException as e:
+            print(red + f"2FA verification failed: {str(e)}. Login denied." + reset)
+            return
+
+        print(green + "2FA verification successful!" + reset)
+    elif admin.get("2fa_method") == "none":
+        print(blue + "2FA is disabled for this account." + reset)
+    else:
+        typing_effect(blue + "Skipping 2FA for system info match." + reset)
+
     # Fetch System Info
     system_info = get_system_info()
 
     # Fetch Last Login Log
     last_log = find_documents("admin_log", {"name": admin["name"]})
-    last_log = last_log[-1] if last_log else {}
 
     # Check if last log exists
     if not last_log:
-        print(yellow + "First-time login detected. Skipping system info check." + reset)
-
-        # Log the system info for future reference
         log_login_time("admin_log", admin["name"], system_info)
         print(green + "Admin login successful! Proceeding to admin menu." + reset)
         admin_login_menu(admin)
@@ -91,7 +129,7 @@ def admin_login_flow(admin, password):
 
     # Compare System Info
     if normalized_system_info != normalized_last_log:
-        print(red + "System info mismatch! Your account is locked." + reset)
+        typing_effect(red + "System info mismatch! Your account is locked." + reset)
 
         send_email(
             admin["email"],
@@ -138,7 +176,6 @@ def user_login_flow(user, password):
     # Reset login attempts after successful password verification
     update_documents("users", {"email": user["email"]}, {"$set": {"login_attempts": 0}})
 
-    # System Info Check
     system_info = get_system_info()
 
     # 2FA Flow if system info changes and 2FA is enabled
