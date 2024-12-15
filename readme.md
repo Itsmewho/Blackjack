@@ -20,6 +20,7 @@ Add on has more features are done.
     - Change 2FA. (done)
   - View login locations. (done)
     - Lock locations.
+      -input sec password
   - Logout. (done)
   - Exit. (done)
   - Delete account. (done)
