@@ -125,9 +125,6 @@ def admin_login_flow(admin, password):
         )
         return
 
-    # Log successful login
-    log_login_time("admin_log", admin["name"], system_info)
-
     # Proceed to Admin Menu
     admin_login_menu(admin)
 
@@ -153,7 +150,7 @@ def user_login_flow(user, password):
             {"email": user["email"]},
             {"$set": {"login_attempts": login_attempts}},
         )
-        print(
+        typing_effect(
             red
             + f"Incorrect password! Attempts remaining: {3 - login_attempts}"
             + reset
@@ -238,5 +235,3 @@ def log_login_time(log_collection, identifier, system_info):
         )
     else:
         return
-
-    print(green + "Login time logged successfully." + reset)
