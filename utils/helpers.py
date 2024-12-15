@@ -48,3 +48,17 @@ def input_quit_handle(prompt, reset=Style.RESET_ALL):
 
 def current_time():
     return datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+
+
+def normalize_system_info(info):
+    normalized = info.copy()
+    # Sort mac_addresses
+    normalized["mac_addresses"] = sorted(normalized.get("mac_addresses", []))
+    # Sort drives by serial numbers
+    normalized["drives"] = sorted(
+        normalized.get("drives", []), key=lambda d: d.get("serial", "")
+    )
+    # Convert latitude and longitude to rounded floats
+    normalized["latitude"] = round(float(normalized.get("latitude", "0")), 4)
+    normalized["longitude"] = round(float(normalized.get("longitude", "0")), 4)
+    return normalized

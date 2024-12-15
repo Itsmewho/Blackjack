@@ -2,9 +2,10 @@ import bcrypt, requests
 from utils.auth import get_system_info, sha256_encrypt
 from user_login.user_menu import user_login_menu
 from user_login.admin_menu import admin_login_menu
-from db.db_operations import find_documents, update_documents, insert_document
+from db.db_operations import find_documents, update_documents
 from utils.helpers import (
     input_quit_handle,
+    normalize_system_info,
     typing_effect,
     current_time,
     sleep,
@@ -12,7 +13,6 @@ from utils.helpers import (
     green,
     blue,
     reset,
-    yellow,
 )
 from utils.auth import send_email, input_masking
 
@@ -110,19 +110,6 @@ def admin_login_flow(admin, password):
         return
 
     # Normalize system info for comparison
-    def normalize_system_info(info):
-        """Normalize system info for comparison."""
-        normalized = info.copy()
-        # Sort mac_addresses
-        normalized["mac_addresses"] = sorted(normalized.get("mac_addresses", []))
-        # Sort drives by serial numbers
-        normalized["drives"] = sorted(
-            normalized.get("drives", []), key=lambda d: d.get("serial", "")
-        )
-        # Convert latitude and longitude to rounded floats
-        normalized["latitude"] = round(float(normalized.get("latitude", "0")), 4)
-        normalized["longitude"] = round(float(normalized.get("longitude", "0")), 4)
-        return normalized
 
     normalized_system_info = normalize_system_info(system_info)
     normalized_last_log = normalize_system_info(last_log.get("system_info", {}))

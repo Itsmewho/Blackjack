@@ -8,7 +8,6 @@ from utils.helpers import (
     typing_effect,
     input_quit_handle,
     clear,
-    handle_quit,
     sleep,
 )
 
