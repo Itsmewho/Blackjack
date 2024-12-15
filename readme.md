@@ -28,12 +28,15 @@ Add on has more features are done.
 
   - Admin menu:
     - See users.
-      - Get user details.
-      - Change user data[role=admin].
-      - Delete user.
-  - Reset password.
-  - View login locations
-    - Lock locations
+      - Get user details. (done)
+      - Change user data. (done)
+      - Delete user. (done)
+  - Reset password admin.
+    -Input sec password
+  - Change 2fa admin.
+    -Input sec password.
+  - View login locations users.
+    - Lock locations users.
   - Logout. (done)
   - Exit. (done)
 
@@ -45,15 +48,9 @@ Add on has more features are done.
 - 2FA. (done)
 - Add unlock account function (flask e-mail)
 - Last login from {"date": "UTC", "location": location, "earth":{"long":"longditude, "lat":latitude"}} ( done )
-  - If not recognized.
-    - Give secoundairy password and email confimation.
-      - Lock location (yes/no)
 - Check login credentials and MAC-addres. If no match: send message to,.( done )
-
   - Check for harddrive(s), motherboard serial, MAC-addres(s) combination (done)
-
 - Lock out Admin account if wrong input or MAC-addres or serial combination(send email to,. (done ))
-
 - Lock out User account if wrong input \*3 (send email) ( done )
 
 #
